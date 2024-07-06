@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+About
+{% endblock title %}
+
+{% block style %}
+<style>
+    .table-no-border,
+    .table-no-border td,
+    .table-no-border th {
+        border: none;
+        background-color: transparent;
+    }
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="container mb-3 h-88">
+    <div class="row mt-4">
+        <div class="col-12 mb-3 p-3">
+            <a href="{% static 'document/Resume-Anand-Bairagi.pdf' %}" class="btn btn-outline-primary" target="_blank">Download Resume</a>
+        </div>
+    </div>
+    <div class="row mt-2">
+      <!-- First Column -->
+      <div class="col-md-6" style="border-right: 1px solid #E1E2E3;">
+        <div class="row">
+            <div class="col-12 bg-light mb-3 p-3 rounded">
+                <h2>About Me</h2>
+                <p class="justify-text">Interest in understanding the data and working with it. Command in Python with knowledge of Matplotlib, Seaborn, Folium, Pandas, Numpy and always ready to use any library that seems to fit the task. I did backend internship in Quantum IT Innovation for 6 months, but find data science much more appealing, and hence now I am a data science freasher who is eager to learn and work with you.</p>
+            </div>
+            <div class="col-12 bg-light p-3 rounded">
+                <h2>Education</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Year</th>
+                            <th>Percentage/CGPA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.</td>
+                            <td>IBM Data Science</td>
+                            <td>2024</td>
+                            <td>99.55%</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>BCA, Degree</td>
+                            <td>2023</td>
+                            <td>82.47%</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>12th CBSE</td>
+                            <td>2020</td>
+                            <td>76.8%</td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>10th CBSE</td>
+                            <td>2017</td>
+                            <td>CGPA: 9.6</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+      </div>
+      <!-- Second Column with Two Rows -->
+      <div class="col-md-6 bg-light p-3 rounded">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <h2>Skills</h2>
+          </div>
+          <div class="col-12 mb-3">
+            <h5>Languages</h5>
+          </div>
+          <div class="col-12 mb-3">
+            <ul class="d-flex fs-5 ms-2">
+                <li>Python</li>
+                <li class="ms-5">PHP</li>
+            </ul>
+          </div>
+          <div class="col-12 mb-3">
+            <h5>Libraries</h5>
+          </div>
+          <div class="col-12 mb-3">
+            <ul class="d-flex fs-5 ms-2">
+                <li>Pandas</li>
+                <li class="ms-5">Numpy</li>
+                <li class="ms-5">Scikit-learn</li>
+            </ul>
+          </div>
+          <div class="col-12 mb-3">
+            <h5>Visualization Tools</h5>
+          </div>
+          <div class="col-12 mb-3">
+            <ul class="d-flex fs-5 ms-2">
+                <li>Matplotlib</li>
+                <li class="ms-5">Seaborn</li>
+                <li class="ms-5">Plotly</li>
+                <li class="ms-5">Dash</li>
+                <li class="ms-5">Folium</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}
+Contact
+{% endblock title %}
+
+{% block style %}
+<style>
+.background-container {
+    position: relative;
+    height: 88vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow: hidden; /* Ensures that child elements stay within the container */
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/img/bg.jpg'); /* Ensure path is correct */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; /* Only apply opacity to the background */
+    z-index: 1;
+}
+
+.content-container {
+    position: relative;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    margin-left: 0;
+    transform: translate(-50%, -50%);
+}
+
+.social-icons {
+  margin-top: 20px;
+}
+
+.social-icons a {
+  font-size: 1.7em;
+  margin: 0 10px;
+  transition: color 0.3s;
+  color: #F8F9FA;
+}
+
+.social-icons a:hover {
+  color: #ffa500; /* Change the color on hover */
+}
+
+.no-underline {
+    text-decoration: none;
+}
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="background-container">
+    <div class="background-overlay"></div>
+        <div class="container content-container">
+            <div class="row d-flex align-items-center">
+                <div id="error-row" class="col-12">
+                    {% comment %} Display error here {% endcomment %}
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2 class="text-white">Contact Me</h2>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-center rounded" style="border: 1px solid #F8F9FA;">
+                                <form class="w-100 px-2 py-4">
+                                    <div class="mb-3">
+                                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Your Email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="exampleInputSubject1" aria-describedby="emailHelp" placeholder="Subject" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <textarea class="form-control" id="exampleTextarea1" rows="3" placeholder="Message for Me" required></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" id="getFormButton" class="btn btn-primary" onClick="sendEmail()" style="width:50%;">Send Mail</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 ps-4">
+                  <h1 class="text-white mb-0 display-1">Hello Again!</h1>
+                  <h1 class="text-white mb-0"><span class="text-white mb-0 fs-5 fw-normal fst-italic">Do you </span>Want a Data Scientist?<span class="text-white mb-0 fs-5 fw-normal fst-italic"></h1>
+                  <h2 class="text-white mb-0 fs-4 fw-normal">Reach out to me...</h2>
+                  <div class="social-icons bg-white-trl">
+                    <a href="https://www.linkedin.com/in/anand-bairagi/" target="_blank" class="linkedin"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://wa.me/8910849215" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                  </div>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<!-- jQuery (necessary for Select2) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Select2 JS (for searchable dropdown) -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    function validateForm() {
+        var form = document.getElementById('contactForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return false;
+        }
+        return true;
+    }
+
+    function sendEmail() {
+        // Disable the button and change its text to "Searching"
+        var formButton = $('#getFormButton');
+        formButton.prop('disabled', true).text('Sending Mail, Please wait ...');
+    
+        // Assign CSRF token to a JavaScript variable
+        var csrfToken = "{{ csrf_token }}";
+        // Make an AJAX request to get recommendations
+        $.ajax({
+            url: '/send_email/',  // URL to your backend endpoint
+            type: 'POST',  // Adjust this if needed
+            data: {
+                from_email: $('#exampleInputEmail1').val(),
+                subject: $('#exampleInputSubject1').val(),
+                message: $('#exampleTextarea1').val(),
+                'csrfmiddlewaretoken': csrfToken
+            },
+            success: function(data) {
+                // Enable the button and restore its previous text
+                formButton.prop('disabled', false).text('Send Mail');
+                // Display success message in a Bootstrap alert
+                var successHtml = '<div class="alert alert-dismissible fade show alert-success" role="alert">Email sent successfully!' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                $('#error-row').append(successHtml);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors if any
+    
+                // Enable the button and restore its previous text
+                formButton.prop('disabled', false).text('Send Mail');
+                
+                // Get the error message from the response
+                var errorMessage
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = xhr.responseJSON.error; 
+                } else {
+                    errorMessage = xhr.responseText
+                }
+                // Display error message in a Bootstrap alert
+                var alertHtml = '<div class="alert alert-dismissible fade show alert-danger" role="alert">' + errorMessage +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                $('#error-row').append(alertHtml);  // Append the alert to the error container
+            }
+        });
+    }
+</script>
+{% endblock script %}

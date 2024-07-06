@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Projects
+{% endblock title %}
+
+{% block style %}
+<style>
+.thumbnail-pic {
+    width: 280px;
+    height: 200px;
+    border-radius: 6px;
+}
+
+.justify-text {
+    text-align: justify;
+}
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="container mb-3 h-88">
+    <div class="row mt-4 bg-light rounded">
+        <div class="col-md-3 p-3 d-flex justify-content-center">
+            <!-- Left Column for Image -->
+            <div class="image">
+              <img src="{% static 'img/mrs.jpg' %}" class="img-fluid thumbnail-pic" alt="mrs">
+            </div>
+        </div>
+        <div class="col-md-9 p-3">
+            <!-- Right Column for Content Writing -->
+            <div class="content social-icons">
+                <h2>Movie Recommendation System</h2>
+                <p class="justify-text">I build a movie recommendation system using a cosine similarity matrix. I used the TMDB (The Movie Database) dataset, which consists of information about 5000 movies (approx). Before implementing the recommendation system, I performed data cleaning and preprocessing to prepare the data for analysis and fitting.</p>
+                <a href="projects/movie-recommendation-system" class="btn btn-outline-primary m-0">
+                    <i class="fas fa-play"></i> Live Preview
+                </a>
+                <a href="https://github.com/coder-bairagi/movie-recommendation-system/blob/main/movie-recommendation-system.ipynb" class="btn btn-outline-dark m-0" target="_blank">
+                    <i class="fab fa-github"></i> GitHub .ipynb
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 bg-light rounded">
+        <div class="col-md-3 p-3 d-flex justify-content-center">
+            <!-- Left Column for Image -->
+            <div class="image">
+              <img src="{% static 'img/olympic-bg.jpg' %}" class="img-fluid thumbnail-pic" alt="olympic">
+            </div>
+        </div>
+        <div class="col-md-9 p-3">
+            <!-- Right Column for Content Writing -->
+            <div class="content social-icons">
+                <h2>Olympic Data Analysis Dashboard</h2>
+                <p class="justify-text">I built an Olympic Data Analysis Dashboard with features including medal tally, overall analysis, country-wise analysis, and athlete-wise analysis. Users can select specific years and countries to tailor the insights. The dashboard offers a comprehensive view of Olympic data, helping users explore trends and performance.</p>
+                <a href="projects/olympic-data-analysis" class="btn btn-outline-primary m-0">
+                    <i class="fas fa-play"></i> Live Preview
+                </a>
+                <a href="https://github.com/coder-bairagi/olympic-data-analysis-dashboard/blob/main/olympic-data-analysis.ipynb" class="btn btn-outline-dark m-0" target="_blank">
+                    <i class="fab fa-github"></i> GitHub .ipynb
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 bg-light rounded">
+        <div class="col-md-3 p-3 d-flex justify-content-center">
+            <!-- Left Column for Image -->
+            <div class="image">
+              <img src="{% static 'img/ppp.jpg' %}" class="img-fluid thumbnail-pic" alt="property-price-prediction">
+            </div>
+        </div>
+        <div class="col-md-9 p-3">
+            <!-- Right Column for Content Writing -->
+            <div class="content social-icons">
+                <h2>Bengaluru Property Price Prediction</h2>
+                <p class="justify-text">I developed a Bengaluru Property Price Prediction model with features to estimate property prices. Users can input location, area in sqft, BHK, and the number of bathrooms to get accurate price predictions. This tool helps users make informed decisions in the real estate market.</p>
+                <a href="projects/property-price-prediction" class="btn btn-outline-primary m-0">
+                    <i class="fas fa-play"></i> Live Preview
+                </a>
+                <a href="https://github.com/coder-bairagi/bengaluru-property-price-prediction/blob/main/bengaluru-price-prediction.ipynb" class="btn btn-outline-dark m-0" target="_blank">
+                    <i class="fab fa-github"></i> GitHub .ipynb
+                </a>
+            </div>
+        </div>
+    </div>
+</div>  
+<div class="mb-5"></div>
+{% endblock body %}

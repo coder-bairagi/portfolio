@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}
+Projects
+{% endblock title %}
+
+{% block style %}
+<style>
+.fit-content {
+    width: fit-content;
+}
+
+.br-50 {
+    border-radius: 50%;
+}
+
+.width-120 {
+    width: 120px;
+}
+
+.width-150 {
+    width: 150px;
+}
+
+.video-wrapper {
+    width: 100%;
+    height: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    width: 100%;
+    height: auto;
+}
+
+.iframe-wrapper {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.iframe-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+}
+
+.iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.zoom-on-hover img {
+    transition: transform 0.3s ease;
+}
+
+.zoom-on-hover:hover img {
+    transform: scale(1.1); /* Adjust the scale factor as needed */
+}
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="container h-88">
+    <div class="row mt-4 bg-light rounded p-4">
+        <div class="col-12 py-0 px-1">
+            <h6 class="mb-0">MoviesRaven</h6>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-8 px-1">
+                    <h2 class="mb-0">{{ movie.name }}</h2>
+                    <div class="d-flex me-3">
+                        <p>{{ movie.release_year }}</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ movie.runtime }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4 px-1 d-flex justify-content-end">
+                    <div class="d-flex flex-column align-items-end px-1">
+                        <h5 class="mb-0 text-secondary">Rating</h5>
+                        <p class="fs-5 mb-0">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-star" style="color: #F6CA2A"></i>&nbsp;{{ movie.vote_average }}<span class="text-secondary">/10</span></p>
+                    </div>
+                    <div class="d-flex flex-column align-items-end px-1">
+                        <h5 class="mb-0 text-secondary">Voted by</h5>
+                        <p class="fs-5 mb-0">&nbsp;&nbsp;&nbsp;&nbsp;{{ movie.vote_count }}</span></p>
+                    </div>
+                    <div class="d-flex flex-column align-items-end px-1">
+                        <h5 class="mb-0 text-secondary">Popilarity</h5>
+                        <p class="fs-5 mb-0">&nbsp;&nbsp;&nbsp;&nbsp;{{ movie.popularity }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-4 px-1">
+                    <img src="{{ movie.poster_path }}" class="img-fluid" alt="poster" />
+                </div>
+                <div class="col-md-8  px-1">
+                    <div class="iframe-wrapper">
+                        <div class="iframe-container">
+                            <iframe src="{{ movie.video_path }}" frameborder="0" allow="autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 pt-3 px-1">
+            {% for genre in movie.genres %}
+            <span class="badge rounded-pill border border-secondary text-dark py-1 px-3 fw-medium" style="font-size: 0.9em;">{{ genre }}</span>
+            {% endfor %}
+        </div>
+        <div class="col-12 pt-3 px-1">
+            <p class="mb-0">{{ movie.overview }}</p>
+        </div>
+        <div class="col-12 pt-1 px-1">
+            <hr>
+            <p class="fw-semibold">Director&nbsp;&nbsp;
+                <span class="text-primary">
+                    {% for director in directors %}
+                    {{ director }}{% if not forloop.last %} | {% endif %}
+                    {% endfor %}
+                </span>
+            </p>
+            <hr>
+            <p class="fw-semibold">Writers&nbsp;&nbsp;
+                <span class="text-primary">
+                    {% for writer in writers %}
+                    {{ writer }}{% if not forloop.last %} | {% endif %}
+                    {% endfor %}
+                </span>
+            </p>
+            <hr>
+            <p class="fw-semibold">Stars&nbsp;&nbsp;
+                <span class="text-primary">
+                    {% for cast in three_casts %}
+                    {{ cast.name }}{% if not forloop.last %} | {% endif %}
+                    {% endfor %}
+                </span>
+            </p>
+            <hr>
+            <p class="fw-semibold">Production&nbsp;&nbsp;
+                <span class="text-primary">
+                    {% for pc in movie.production_companies %}
+                    {{ pc }}{% if not forloop.last %} | {% endif %}
+                    {% endfor %}
+                </span>
+            </p>
+            <hr>
+        </div>
+        <div class="col-md-8 py-2 px-1">
+            <h3 class="mb-0">Top Cast<i class="ms-3 fas fa-angle-right"></i></h3>
+            <div class="col-md-12 pt-3 px-1">
+                <div class="row">
+                    {% for cast in casts %}
+                    <div class="col-md-6 py-3">
+                        <div class="d-flex">
+                            <img src="{{ cast.profile_path }}" class="img-fluid br-50 width-120" alt="{{ cast.name }}">
+                            <div class="d-flex flex-column justify-content-center align-items-start ms-4">
+                                <p class="fw-bold text-center mb-0 mt-2">{{ cast.name }}</p>
+                                <p class="text-secondary mb-0">{{ cast.character }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 py-2 ps-3 pe-1" style="border-left: 1px solid #C2C4C5">
+            <h3 class="mb-0">More like this<i class="ms-3 fas fa-angle-right"></i></h3>
+            {% for next_rec in recommendations %}
+            <a href="{{ next_rec.name }}" class="link-dark link-underline link-underline-opacity-0">
+                <div class="col-md-12 pt-3 px-1 zoom-on-hover">
+                    <div class="d-flex">
+                        <img src="{{ next_rec.poster_path }}" class="img-fluid width-150" alt="poster" />
+                        <div class="d-flex flex-column align-items-start ms-4">
+                            <p class="fw-bold mb-0">{{ next_rec.name }}</p>
+                            <p class="text-secondary mb-0">({{ next_rec.release_year }})</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock body %}

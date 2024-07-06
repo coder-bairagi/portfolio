@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock title %}
+
+{% block style %}
+<style>
+.profile-photo {
+    border-radius: 50%;
+}
+
+.background-container {
+    position: relative;
+    height: 88vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow: hidden; /* Ensures that child elements stay within the container */
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/img/bg.jpg'); /* Ensure path is correct */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; /* Only apply opacity to the background */
+    z-index: 1;
+}
+
+.content-container {
+    position: relative;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    margin-left: 0;
+    transform: translate(-50%, -50%);
+}
+
+.social-icons {
+  margin-top: 20px;
+}
+
+.social-icons a {
+  font-size: 1.7em;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #ffa500; /* Change the color on hover */
+}
+
+.social-icons .github {
+  color: #333;
+}
+
+.social-icons .linkedin {
+  color: #0077b5;
+}
+
+.social-icons .email {
+  color: #d14836;
+}
+
+.social-icons .whatsapp {
+  color: #25d366;
+}
+
+.social-icons .call {
+  color: #0d6efd;
+}
+
+.bg-white-trl {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius:4px;
+  width: fit-content;
+}
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="background-container">
+  <div class="background-overlay"></div>
+    <div class="container content-container">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-3">
+              <img src="../static/img/pic.jpg" class="img-fluid profile-photo" alt="data-scientist">
+            </div>
+            <div class="col-md-9 ps-4">
+              <h1 class="text-white mb-0 display-1">Hello!</h1>
+              <h1 class="text-white mb-0"><span class="text-white mb-0 fs-5 fw-normal fst-italic">My name is, </span>Anand Bairagi<span class="text-white mb-0 fs-5 fw-normal fst-italic">, once a Backend Developer</h1>
+              <h2 class="text-white mb-0 fs-4 fw-normal">now diving into the world of Data Science and seeking to learn more</h2>
+              <div class="social-icons bg-white-trl">
+                <a href="https://github.com/coder-bairagi" target="_blank" class="github"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/anand-bairagi" target="_blank" class="linkedin"><i class="fab fa-linkedin"></i></a>
+                <a href="https://wa.me/8910849215" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

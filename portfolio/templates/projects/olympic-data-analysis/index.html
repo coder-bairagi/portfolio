@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Projects
+{% endblock title %}
+
+{% block head %}
+{% load plotly_dash %}
+{% plotly_header %}
+{% endblock head %}
+
+{% block body %}
+<div class="container-fluid p-0 h-88">
+    {% plotly_direct name="oda" %}
+</div>
+{% plotly_footer %}
+{% endblock body %}
+
+{% block script %}
+
+{% endblock script %}

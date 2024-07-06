@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Projects
+{% endblock title %}
+
+{% block body %}
+<div class="container h-88">
+    <div class="row mt-4 bg-light rounded p-4">
+        <div id="error-row" class="col-12">
+            {% comment %} Display error here {% endcomment %}
+        </div>
+        <div class="col-12">
+            <h1 class="text-center">Bengaluru Property Price Prediction</h1>
+        </div>
+        <div class="col-12 mt-3">
+            <div class="row">
+                <div class="col-6 mt-2">
+                    <label for="location" class="form-label fw-medium">Location</label>
+                    <select id="location" class="form-control">
+                        {% for location in locations %}
+                            <option value="{{ location }}">{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 mt-2">
+                    <label for="area_in_sqft" class="form-label fw-medium">Area (in sqft)</label>
+                    <input id="area_in_sqft" type="number" min="0" class="form-control" />
+                </div>
+                <div class="col-6 mt-4">
+                    <label for="bhk" class="form-label fw-medium">BHK</label>
+                    <select id="bhk" class="form-control">
+                        {% for bhk in bhks %}
+                            <option value={{ bhk }}>{{ bhk }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 mt-4">
+                    <label for="bath" class="form-label fw-medium">Number of Bathrooms</label>
+                    <select id="bath" class="form-control">
+                        {% for key, value in baths.items %}
+                            <option value={{ key }}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-4 text-center">
+            <button type="button" id="getPriceButton" class="btn btn-primary" onclick="getPricePrediction()" style="width: 80%;">Get Price</button>
+        </div>
+    </div>
+
+    {% comment %} Display Price Prediction Here {% endcomment %}
+    <div id="price-prediction-row" class="row mt-2"></div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<!-- jQuery (necessary for Select2) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Select2 JS (for searchable dropdown) -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    function getPricePrediction() {
+        // Disable the button and change its text to "Searching"
+        var priceButton = $('#getPriceButton');
+        priceButton.prop('disabled', true).text('Please wait...');
+    
+        // Assign CSRF token to a JavaScript variable
+        var csrfToken = "{{ csrf_token }}";
+        // Make an AJAX request to get recommendations
+        $.ajax({
+            url: '/get_price/',  // URL to your backend endpoint
+            type: 'POST',  // Adjust this if needed
+            data: {
+                location: $('#location').val(),
+                total_sqft: $('#area_in_sqft').val(),
+                bath: $('#bath').val(),
+                bhk: $('#bhk').val(),
+                'csrfmiddlewaretoken': csrfToken
+            },
+            success: function(data) {
+                // Clear previous recommendations
+                $('#price-prediction-row').empty();
+                
+                // Add predicted price
+                var col = $('<div class="col-12 d-flex justify-content-center"></div>');
+                var price = $('<p class="fs-5" style="border-bottom: 1px solid #4b8ff2">Predicted Price: ' + data.shorthand_price + '</p>');
+                col.append(price)
+                $('#price-prediction-row').append(col);
+    
+                // Enable the button and restore its previous text
+                priceButton.prop('disabled', false).text('Get Price');
+            },
+            error: function(xhr, status, error) {
+                // Handle errors if any
+    
+                // Enable the button and restore its previous text
+                priceButton.prop('disabled', false).text('Get Price');
+                
+                // Get the error message from the response
+                var errorMessage
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = xhr.responseJSON.error; 
+                } else {
+                    errorMessage = xhr.responseText
+                }
+                if (errorMessage == "could not convert string to float: ''") {
+                    errorMessage = 'Please Enter Area in Square Feet'
+                }
+                // Display error message in a Bootstrap alert
+                var alertHtml = '<div class="alert alert-dismissible fade show alert-danger" role="alert">' + errorMessage +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                $('#error-row').append(alertHtml);  // Append the alert to the error container
+            }
+        });
+    }
+</script>
+{% endblock script %}

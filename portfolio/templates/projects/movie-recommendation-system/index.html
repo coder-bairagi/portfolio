@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}
+Projects
+{% endblock title %}
+
+{% block body %}
+<div class="container h-88">
+    <div class="row mt-4 bg-light rounded p-4">
+        <div id="error-row" class="col-12">
+            {% comment %} Display error here {% endcomment %}
+        </div>
+        <div class="col-12">
+            <h1 class="text-center">MoviesRaven</h1>
+        </div>
+        <div class="col-12 mt-3">
+            <label for="movie-select" class="form-label">Select a Movie to Get Recommendations:</label>
+            <select id="movie-select" class="form-control">
+                {% for movie in movies %}
+                    <option value="{{movie}}">{{ movie }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 mt-3 text-center">
+            <button type="button" id="recommendButton" class="btn btn-primary" onclick="getRecommendations()">Recommend</button>
+        </div>
+    </div>
+
+    {% comment %} Display Recommendations Here {% endcomment %}
+    <div id="recommendation-row" class="row mt-4"></div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<!-- jQuery (necessary for Select2) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Select2 JS (for searchable dropdown) -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+function getRecommendations() {
+    // Disable the button and change its text to "Searching"
+    var recommendButton = $('#recommendButton');
+    recommendButton.prop('disabled', true).text('Searching...');
+
+    // Assign CSRF token to a JavaScript variable
+    var csrfToken = "{{ csrf_token }}";
+    // Make an AJAX request to get recommendations
+    $.ajax({
+        url: '/get_recommendations/',  // URL to your backend endpoint
+        type: 'POST',  // Adjust this if needed
+        data: { movie: $('#movie-select').val(), 'csrfmiddlewaretoken': csrfToken },
+        success: function(data) {
+            // Clear previous recommendations
+            $('#recommendation-row').empty();
+            
+            // Add new recommendations
+            var detail_alert = '<div class="alert alert-success" role="alert">' + 'Click on any movie poster to see movie details' + '</div>'
+            $('#recommendation-row').append(detail_alert)
+            $.each(data.recommendations, function(index, movie) {
+                var col = $('<div class="col-12 col-sm-6 col-md-4 col-lg-2"></div>');
+                var movieLink = $('<a href="movie-recommendation-system/' + movie.name + '" class="link-dark link-underline-opacity-0"></a>');
+                var poster = $('<img src="' + movie.poster_path + '" alt="' + movie.name + '" class="img-fluid">');
+                var name = $('<p>' + movie.name + '(' + movie.release_year + ')' + '</p>');
+                movieLink.append(poster)
+                movieLink.append(name)
+                col.append(movieLink)
+                $('#recommendation-row').append(col);
+            });
+
+            // Enable the button and restore its previous text
+            recommendButton.prop('disabled', false).text('Recommend');
+        },
+        error: function(xhr, status, error) {
+            // Handle errors if any
+
+            // Enable the button and restore its previous text
+            recommendButton.prop('disabled', false).text('Recommend');
+            
+            // Get the error message from the response
+            var errorMessage
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMessage = xhr.responseJSON.error; 
+            } else {
+                errorMessage = xhr.responseText
+            }
+            // Display error message in a Bootstrap alert
+            var alertHtml = '<div class="alert alert-dismissible fade show alert-danger" role="alert">' + errorMessage +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            $('#error-row').append(alertHtml);  // Append the alert to the error container
+        }
+    });
+}
+</script>
+{% endblock script %}
